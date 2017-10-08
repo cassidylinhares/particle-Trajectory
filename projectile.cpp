@@ -9,8 +9,8 @@ const double _k = 0.5;
 const double dt = 0.001;
 
 auto force(TState s) { 
-	double x = cos(_k*s.position.z - w*dt);
-	double y = sin(_k*s.position.z - w*dt);
+	double x = cos(_k*s.position.z - w*s.t);
+	double y = sin(_k*s.position.z - w*s.t);
 	double z = 0;
 	return q * Eo/sqrt(2) * VecR3<double>{x, y, z}; 
 }
@@ -19,7 +19,7 @@ auto verlet_step(TState s, VecR3<double> accel) {
   TState next;
   next.t = s.t + dt;
   next.position = s.position + (s.velocity * dt) + (accel * dt*dt* 0.5);
-  next.velocity = s.velocity + (accel + force(next) / m)*dt*0.5;
+  next.velocity = s.velocity + (accel + (force(next) / m))*dt*0.5;
   return next;
 }
 
